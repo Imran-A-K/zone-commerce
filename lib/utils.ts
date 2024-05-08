@@ -34,14 +34,7 @@ export function constructMetadata({
       description,
       images: [{ url: image }],
     },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [image],
-      creator: "@joshtriedcoding",
-    },
+
     icons,
-    metadataBase: new URL("https://casecobra.vercel.app/"),
   };
 }
