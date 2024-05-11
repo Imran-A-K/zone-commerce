@@ -3,9 +3,16 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import dummyUser from "@/public/dummyUser.png";
 
-const Navbar = async () => {
+const Navbar3 = async () => {
   const user = false;
 
   return (
@@ -20,7 +27,7 @@ const Navbar = async () => {
           <div className="h-full flex items-center space-x-4">
             {user ? (
               <>
-                <Link
+                {/* <Link
                   href="/api/auth/logout"
                   className={buttonVariants({
                     size: "sm",
@@ -28,16 +35,23 @@ const Navbar = async () => {
                   })}
                 >
                   Sign out
-                </Link>
+                </Link> */}
+
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>
+                    <AvatarImage src={dummyUser} />
+                  </AvatarFallback>
+                </Avatar>
 
                 <Link
-                  href="/configure/upload"
+                  href="/products"
                   className={buttonVariants({
                     size: "sm",
                     className: "hidden sm:flex items-center gap-1",
                   })}
                 >
-                  Create case
+                  Products
                   <ArrowRight className="ml-1.5 h-5 w-5" />
                 </Link>
               </>
@@ -75,6 +89,42 @@ const Navbar = async () => {
                   Products
                   <ArrowRight className="ml-1.5 h-5 w-5" />
                 </Link>
+
+                <HoverCard>
+                  <HoverCardTrigger>
+                    {" "}
+                    <Avatar>
+                      <AvatarImage src={dummyUser} />
+                      <AvatarFallback>
+                        <Image
+                          src={dummyUser}
+                          height={100}
+                          width={100}
+                          alt="fall-back-user-image"
+                        />
+                      </AvatarFallback>
+                    </Avatar>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="flex flex-col gap-1 w-32">
+                    <Link
+                      href="/profile"
+                      className={buttonVariants({
+                        size: "sm",
+                        variant: "ghost",
+                      })}
+                    >
+                      Profile
+                    </Link>
+                    <Button
+                      className={buttonVariants({
+                        size: "sm",
+                        variant: "destructive",
+                      })}
+                    >
+                      Sign out
+                    </Button>
+                  </HoverCardContent>
+                </HoverCard>
               </>
             )}
           </div>
@@ -84,4 +134,4 @@ const Navbar = async () => {
   );
 };
 
-export default Navbar;
+export default Navbar3;
