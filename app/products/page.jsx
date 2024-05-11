@@ -7,6 +7,7 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { useRef, useCallback } from "react";
 import { debounce } from "lodash";
+import { ProductFilterDrawer } from "@/components/Product/ProductFilterDrawer";
 function Products() {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedSubCategories, setSelectedSubCategories] = useState([]);

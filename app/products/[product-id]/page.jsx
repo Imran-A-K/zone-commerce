@@ -3,7 +3,11 @@ import MaxWidthWrapper from "@/components/MaxWidthWrapper";
 import ImageGallery from "@/components/Product/ImageGallery";
 import Info from "@/components/Product/Info";
 import ProductCard from "@/components/Product/ProductCard";
-import { getProduct, getRelatedProduct } from "@/lib/actions/actions";
+import {
+  getProduct,
+  getRelatedProduct,
+  useGetUser,
+} from "@/lib/actions/actions";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 
@@ -12,6 +16,8 @@ function Page({ params }) {
     queryKey: ["products", params["product-id"]],
     queryFn: () => getProduct({ id: params["product-id"] }),
   });
+  const [user, userLoading, reloadUser] = useGetUser();
+
   const { data: relatedProducts = {}, isLoading: isRelatedProductsLoading } =
     useQuery({
       queryKey: ["related-products", params["product-id"]],
@@ -23,13 +29,12 @@ function Page({ params }) {
   const availableSizes = data?.variants
     ? [...new Set(data?.variants.map((variant) => variant.size))]
     : [];
-  console.log("related", relatedProducts);
   return (
     <MaxWidthWrapper>
       {isLoading ? (
         <>Loading</>
       ) : (
-        <div className="grid grid-cols-2 mt-10 gap-14">
+        <div className="grid  lg:grid-cols-2 mt-10 gap-14">
           <ImageGallery images={data.images} />
           <Info
             product={data}
@@ -39,7 +44,7 @@ function Page({ params }) {
         </div>
       )}
       {!isRelatedProductsLoading && relatedProducts?.products.length > 0 && (
-        <div className="w-full flex flex-wrap gap-16">
+        <div className="w-full flex flex-wrap gap-16 mt-3">
           <p className="w-full text-2xl font-semibold pb-2 border-b-[1px] border-slate-500">
             Related Products
           </p>

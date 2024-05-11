@@ -1,13 +1,16 @@
+"use client";
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { buttonVariants } from "./ui/button";
+import { useGetUser } from "@/lib/actions/actions";
 
-const Navbar = async () => {
-  const user = false;
-
+const Navbar = () => {
+  const [user, userLoading, reloadUser] = useGetUser();
+  console.log("ccccc", user);
+  const ser = false;
   return (
     <nav className="sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
       <MaxWidthWrapper>
@@ -18,7 +21,7 @@ const Navbar = async () => {
           </Link>
 
           <div className="h-full flex items-center space-x-4">
-            {user ? (
+            {ser ? (
               <>
                 <Link
                   href="/api/auth/logout"

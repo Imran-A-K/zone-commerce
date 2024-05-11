@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React from "react";
 import { Input } from "@/components/ui/input";
 
 import { brands, categories, subCategories } from "@/lib/constant";

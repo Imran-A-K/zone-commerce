@@ -1,3 +1,4 @@
+"use-client";
 import Link from "next/link";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 
@@ -11,9 +12,13 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import dummyUser from "@/public/dummyUser.png";
+import { useGetUser } from "@/lib/actions/actions";
 
-const Navbar3 = async () => {
-  const user = false;
+function Navbar3() {
+  const [user, userLoading, reloadUser] = useGetUser();
+  console.log("ccccc", user);
+
+  const ser = false;
 
   return (
     <nav className="sticky z-[100] h-14 inset-x-0 top-0 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -25,7 +30,7 @@ const Navbar3 = async () => {
           </Link>
 
           <div className="h-full flex items-center space-x-4">
-            {user ? (
+            {user?.user_id ? (
               <>
                 {/* <Link
                   href="/api/auth/logout"
@@ -37,12 +42,41 @@ const Navbar3 = async () => {
                   Sign out
                 </Link> */}
 
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>
-                    <AvatarImage src={dummyUser} />
-                  </AvatarFallback>
-                </Avatar>
+                <HoverCard>
+                  <HoverCardTrigger>
+                    {" "}
+                    <Avatar>
+                      <AvatarImage src={dummyUser} />
+                      <AvatarFallback>
+                        <Image
+                          src={dummyUser}
+                          height={100}
+                          width={100}
+                          alt="fall-back-user-image"
+                        />
+                      </AvatarFallback>
+                    </Avatar>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="flex flex-col gap-1 w-32">
+                    <Link
+                      href="/profile"
+                      className={buttonVariants({
+                        size: "sm",
+                        variant: "ghost",
+                      })}
+                    >
+                      Profile
+                    </Link>
+                    <Button
+                      className={buttonVariants({
+                        size: "sm",
+                        variant: "destructive",
+                      })}
+                    >
+                      Sign out
+                    </Button>
+                  </HoverCardContent>
+                </HoverCard>
 
                 <Link
                   href="/products"
@@ -89,42 +123,6 @@ const Navbar3 = async () => {
                   Products
                   <ArrowRight className="ml-1.5 h-5 w-5" />
                 </Link>
-
-                <HoverCard>
-                  <HoverCardTrigger>
-                    {" "}
-                    <Avatar>
-                      <AvatarImage src={dummyUser} />
-                      <AvatarFallback>
-                        <Image
-                          src={dummyUser}
-                          height={100}
-                          width={100}
-                          alt="fall-back-user-image"
-                        />
-                      </AvatarFallback>
-                    </Avatar>
-                  </HoverCardTrigger>
-                  <HoverCardContent className="flex flex-col gap-1 w-32">
-                    <Link
-                      href="/profile"
-                      className={buttonVariants({
-                        size: "sm",
-                        variant: "ghost",
-                      })}
-                    >
-                      Profile
-                    </Link>
-                    <Button
-                      className={buttonVariants({
-                        size: "sm",
-                        variant: "destructive",
-                      })}
-                    >
-                      Sign out
-                    </Button>
-                  </HoverCardContent>
-                </HoverCard>
               </>
             )}
           </div>
@@ -132,6 +130,6 @@ const Navbar3 = async () => {
       </MaxWidthWrapper>
     </nav>
   );
-};
+}
 
 export default Navbar3;

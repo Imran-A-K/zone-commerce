@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import MaxWidthWrapper from "./MaxWidthWrapper";
 import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
-import Phone from "./Phone";
 import Image from "next/image";
 
 const PHONES = [
@@ -97,7 +96,6 @@ function Review({ imgSrc, className, ...props }) {
         height={400}
         className="object-cover rounded-md"
       />
-      {/* <Phone imgSrc={imgSrc} /> */}
     </div>
   );
 }
@@ -113,7 +111,7 @@ function ReviewGrid() {
   return (
     <div
       ref={containerRef}
-      className="relative -mx-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3"
+      className="relative -ml-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3"
     >
       {isInView ? (
         <>

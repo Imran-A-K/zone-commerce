@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import * as Yup from "yup";
 import { registerUser, useGetUser } from "@/lib/actions/actions";
+import { useQueryClient } from "@tanstack/react-query";
 
 const signUpSchema = Yup.object({
   firstName: Yup.string()
@@ -50,6 +51,7 @@ function Register() {
   const [userSelectedImage, setUserSelectedImage] = useState();
   const [user, userLoading, reloadUser] = useGetUser();
   const router = useRouter();
+  const queryClient = useQueryClient();
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -63,13 +65,18 @@ function Register() {
       initialValues,
       validationSchema: signUpSchema,
       onSubmit: async (values, action) => {
+        const userIntendedDestination = localStorage.getItem(
+          "userIntendedDestination"
+        );
         toast.promise(
           registerUser({ ...values, userImage: userSelectedImage }),
           {
             loading: "Registering User...",
             success: (data) => {
+              queryClient.invalidateQueries({});
               setTimeout(() => {
-                router.push("/login");
+                localStorage.removeItem("userIntendedDestination");
+                router.push(userIntendedDestination ?? "/");
               }, 1000);
               return `User registration successful`;
             },

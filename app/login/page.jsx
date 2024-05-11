@@ -22,19 +22,7 @@ function Login() {
     password: Yup.string().required("Please enter your password"),
   });
   const [user, userLoading, reloadUser] = useGetUser();
-  const saveSettings = (settings, userVerification) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const isSuccess = settings;
 
-        if (isSuccess) {
-          resolve(settings);
-        } else {
-          reject(new Error(userVerification));
-        }
-      }, 1000);
-    });
-  };
   const initialValues = {
     email: "",
     password: "",
@@ -50,6 +38,7 @@ function Login() {
         toast.promise(verifyUser({ ...values }), {
           loading: "Logging in...",
           success: (data) => {
+            reloadUser();
             setTimeout(() => {
               localStorage.removeItem("userIntendedDestination");
               router.push(userIntendedDestination ?? "/");

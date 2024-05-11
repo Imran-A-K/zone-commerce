@@ -2,8 +2,24 @@
 import React, { useState } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  addToCart,
+  creatingCartInstance,
+  useGetUser,
+} from "@/lib/actions/actions";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Info = ({ product, availableColors = [], availableSizes = [] }) => {
+  const queryClient = useQueryClient();
+  const pathname = usePathname();
+  const router = useRouter();
+  const [user, userLoading, reloadUser] = useGetUser();
+  // console.log("ccccc", user, !!user);
+  console.log("product", product);
+
   const { title, short_desc, brand, variants = [], selling_price } = product;
   const [colorsToDisplay, setColorsToDisplay] = useState(availableColors);
   const [sizesToDisplay, setSizesToDisplay] = useState(availableSizes);
@@ -11,6 +27,51 @@ const Info = ({ product, availableColors = [], availableSizes = [] }) => {
   const [selectedSize, setSelectedSize] = useState("");
   const [quantity, setQuantity] = useState("1");
   const [productStock, setProductStock] = useState(0);
+
+  // console.log(selectedColour, selectedSize);
+  const handleAddToCart = () => {
+    if (!user) {
+      localStorage.setItem("userIntendedDestination", pathname);
+      toast.info("Please login to continue shopping");
+      router.push("/login");
+      return;
+    }
+    if (selectedColour.length === 0 && selectedSize.length === 0) {
+      toast.info("Please select a color and size");
+      return;
+    } else if (selectedColour.length === 0) {
+      toast.info("Please select a color");
+      return;
+    } else if (!notApplicableSize && selectedSize.length === 0) {
+      toast.info("Please select a size");
+      return;
+    }
+    const variantImageIndex = product.variants.find(
+      (item) =>
+        item.code === selectedColour && item.size === (selectedSize || "N/A")
+    ).image;
+    const color = product.variants.find(
+      (item) => item.code === selectedColour
+    ).color;
+
+    toast.promise(
+      addToCart(product, color, selectedSize, variantImageIndex, quantity),
+      {
+        loading: "Adding to Cart...",
+        success: (data) => {
+          queryClient.invalidateQueries({
+            queryKey: ["cartData"],
+          });
+          return `Successfully Added to cart`;
+        },
+        error: (error) => {
+          // const [errorKey] = Object.keys(error.response.data);
+          // return error.response.data[errorKey];
+          return "Could not add to cart";
+        },
+      }
+    );
+  };
 
   const handleColorSelect = (color) => {
     if (selectedColour == color) {
@@ -111,7 +172,7 @@ const Info = ({ product, availableColors = [], availableSizes = [] }) => {
         </>
       ) : null}
 
-      <div className="">
+      <div className="flex flex-col gap-4">
         <Label htmlFor="quantity" className="flex items-center gap-2 pt-5">
           <span className="text-lg font-medium">Qty</span>
           <Input
@@ -119,6 +180,17 @@ const Info = ({ product, availableColors = [], availableSizes = [] }) => {
             type="number"
             name="quantity"
             onChange={(event) => {
+              if (selectedColour.length === 0 && selectedSize.length === 0) {
+                toast.info("Please select a color and size");
+                return;
+              } else if (selectedColour.length === 0) {
+                toast.info("Please select a color");
+                return;
+              } else if (selectedSize.length === 0) {
+                toast.info("Please select a size");
+                return;
+              }
+
               if (event.target.value > 0) {
                 if (event.target.value <= productStock)
                   setQuantity(event.target.value);
@@ -126,7 +198,7 @@ const Info = ({ product, availableColors = [], availableSizes = [] }) => {
             }}
             value={quantity}
             id="quantity"
-            disabled={productStock == 0}
+            // disabled={productStock == 0}
           />
           {productStock > 0 && (
             <span className="font-semibold text-neutral-500 text-lg">
@@ -134,6 +206,9 @@ const Info = ({ product, availableColors = [], availableSizes = [] }) => {
             </span>
           )}
         </Label>
+        <Button onClick={() => handleAddToCart()} className="w-1/3">
+          Add to Cart
+        </Button>
       </div>
     </div>
   );
