@@ -5,15 +5,22 @@ import MaxWidthWrapper from "./MaxWidthWrapper";
 import { useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import image1 from "@/public/Popular/popular-1.jpg";
+import image2 from "@/public/Popular/popular-2.webp";
+import image3 from "@/public/Popular/popular-3.jpeg";
+import image4 from "@/public/Popular/popular-4.jpg";
+import image5 from "@/public/Popular/popular-5.jpg";
+import image6 from "@/public/Popular/popular-6.jpeg";
 
-const PHONES = [
-  "/popular/popular-1.jpg",
-  "/popular/popular-2.webp",
-  "/popular/popular-3.jpeg",
-  "/popular/popular-4.jpg",
-  "/popular/popular-5.jpg",
-  "/popular/popular-6.jpeg",
-];
+const PHONES = [image1, image2, image3, image4, image5, image6];
+// const PHONES = [
+//   "/popular/popular-1.jpg",
+//   "/popular/popular-2.webp",
+//   "/popular/popular-3.jpeg",
+//   "/popular/popular-4.jpg",
+//   "/popular/popular-5.jpg",
+//   "/popular/popular-6.jpeg",
+// ];
 
 function splitArray(array, numParts) {
   const result = [];
